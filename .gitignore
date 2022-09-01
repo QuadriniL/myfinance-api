@@ -1,6 +1,9 @@
 # compiled output
 /dist
 /node_modules
+yarn.lock
+yarn-error.log
+/__tmp__
 
 # Logs
 logs
