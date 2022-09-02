@@ -1,1 +1,1 @@
-web: npm install && npm run prebuild && npm run build && node dist/main
+web: npm install && npm run prebuild && npm run build && npm run start:prod
