@@ -20,13 +20,16 @@ export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
   @Post()
-  create(@Body() createTransactionDto: CreateTransactionDto) {
-    return this.transactionsService.create(createTransactionDto);
+  create(@Body() createTransactionDto: CreateTransactionDto, @Req() req: any) {
+    return this.transactionsService.create({
+      userId: req.user.sub,
+      ...createTransactionDto,
+    });
   }
 
   @Get()
   findAll(@Req() req: any) {
-    return this.transactionsService.findAll();
+    return this.transactionsService.findAll(req.user.sub);
   }
 
   @Get(':id')

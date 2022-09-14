@@ -14,4 +14,12 @@ export class Transaction extends Model {
 
   @Column
   description: string;
+
+  @Column({
+    references: {
+      model: 'users',
+      key: 'id',
+    },
+  })
+  userId: string;
 }

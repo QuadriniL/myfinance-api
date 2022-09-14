@@ -1,28 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-
-const users = [
-  {
-    id: 1,
-    username: 'john',
-    document: '123456789',
-    password: '$2b$10$EecWnvyBtN4ttSJWILAjs.lnOfVejB7ABCxWGLS0OUCEcbcnwTu5K', // 123456
-  },
-  {
-    id: 2,
-    username: 'jane',
-    document: '987654321',
-    password: '$2b$10$EecWnvyBtN4ttSJWILAjs.lnOfVejB7ABCxWGLS0OUCEcbcnwTu5K', // 123456
-  },
-];
+import { User } from '../../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(private jwtService: JwtService) {}
 
-  login(username: string, password: string) {
-    const user = this.validateCredentials(username, password);
+  async login(username: string, password: string) {
+    const user = await this.validateCredentials(username, password);
 
     if (user) {
       const payload = { username: user.username, sub: user.id };
@@ -32,16 +18,11 @@ export class AuthService {
     return null;
   }
 
-  validateCredentials(document: string, password: string) {
-    const user = users.find(
-      (user) =>
-        user.document === document &&
-        bcrypt.compareSync(password, user.password)
-    );
+  async validateCredentials(document: string, password: string) {
+    const user = await User.findOne({ where: { document } });
 
-    if (user) {
-      return user;
-    }
+    if (user && bcrypt.compareSync(password, user.password)) return user;
+
     return null;
   }
 }

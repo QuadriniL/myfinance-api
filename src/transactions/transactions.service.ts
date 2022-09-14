@@ -15,8 +15,12 @@ export class TransactionsService {
     });
   }
 
-  findAll() {
-    return Transaction.findAll();
+  findAll(userId: string) {
+    return Transaction.findAll({
+      where: {
+        userId,
+      },
+    });
   }
 
   findOne(id: string) {
